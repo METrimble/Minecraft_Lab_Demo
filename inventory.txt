@@ -1,0 +1,4 @@
+3
+cobblestone 64
+pikaxe 4
+wood 55

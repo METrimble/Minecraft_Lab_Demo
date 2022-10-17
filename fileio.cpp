@@ -6,50 +6,47 @@
 *Topics:
 *Writing a design
 *Reading from a file
-*Bubble sort / any other sorting
 *Writing to a file
 *Makefiles
-*Tar files and Warning
 *************/
 
 using namespace std;
 
-void add_items(int num_items, ofstream& outf){
+struct item{
+    string name;
     int amount_item;
-    string name_item;
+};
+
+item* add_items(int num_items, ofstream& outf){
+    //create inventory
+    item* inventory = new item[num_items];  
 
     cout << "You currently have an empty inventory, before you go out to explore a cave what do you bring?" << endl;
 
+    //loop through and ask for the item's info, then store in file
     for(int index = 0; index < num_items; index++){
+        cout << "item " << index << endl; 
+
         cout << "Name of item: ";
-        cin >> name_item;
-        outf << name_item << " ";
+        cin >> inventory[index].name;
+        outf << inventory[index].name << " ";
 
         cout << "Amount of that item: ";
-        cin >> amount_item;
-        outf << amount_item << endl;
+        cin >> inventory[index].amount_item;
+        outf << inventory[index].amount_item << endl;
 
-        cout << endl;
+        cout << "---------------------";
     }
 
     outf.close();
-}
 
-void print_inventory(int num_items, ifstream& inf){
-    string line; //to hold the line that will be printed out
-
-    cout << "Here is your current invetory: " << endl;
-    while(getline(inf, line)){
-        cout << line << endl;
-    }
-
-    inf.close();
+    return inventory;
 }
 
 int main(){
     int num_items = 0;
 
-    /*write to the file*/
+    /*write (cout) to the file*/
     ofstream outf("inventory.txt");
 
     //if the file is not open
@@ -63,17 +60,20 @@ int main(){
     cin >> num_items;
     outf << num_items << endl;
 
-    add_items(num_items, outf);
+    item* inventory = add_items(num_items, outf);
 
-    /*Read from file*/
+    /*Read from file - reference*/
+    /****************
     ifstream inf("inventory.txt");
 
     if(!(inf.is_open())){
         cout << "The file did not open, the program will now quit" << endl;
         return 1;
     }
+    *****************/
 
-    print_inventory(num_items, inf);
+    //free heap memory
+    delete [] inventory;
 
     return 0;
 }
